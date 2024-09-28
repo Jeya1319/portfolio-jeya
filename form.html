@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Form Validation</title>
+    <style>
+        body {
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3-s-Qijjufx-c2zPv1Pn2_NJwQHsVYUI7OIlS80GnJ2w7x15eeLuIdmTwk9hhivFHF2I&usqp=CAU'); /* Replace with your image URL */
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        #form {
+            
+            
+            width: 400px;
+            margin: 20vh auto;
+            background-color: rgba(240, 248, 255, 0.9); 
+            border: 2px solid black;
+            border-radius: 15px; 
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+        }
+
+        h1 {
+            text-align: center;
+            color: blueviolet;
+        }
+
+        #form button {
+            background-color: blueviolet;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 20px 0;
+            cursor: pointer;
+            font-size: 20px;
+            width: 100%;
+            transition: background-color 0.3s; 
+        }
+
+        #form button:hover {
+            background-color: darkviolet;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+
+        .input-group input, .input-group textarea {
+            border-radius: 5px;
+            font-size: 20px;
+            margin-top: 5px;
+            padding: 10px;
+            border: 1px solid black;
+            transition: border-color 0.3s; 
+        }
+
+        .input-group input:focus, .input-group textarea:focus {
+            outline: 0;
+            border-color: blueviolet; 
+        }
+
+        .error {
+            color: red;
+            font-size: 16px;
+            margin-top: 5px;
+        }
+
+        .input-group.success input, .input-group.success textarea {
+            border-color: green;
+        }
+
+        .input-group.error input, .input-group.error textarea {
+            border-color: red;
+        }
+
+        label {
+            color: black;
+            font-weight: bold; 
+            font-size: 16px; 
+            margin-bottom: 5px; 
+        }
+
+        @media screen and (max-width: 400px) {
+            /* Add your styles here if needed */
+        }
+
+        @media screen and (max-width: 900px) {
+            /* Add your styles here if needed */
+        }
+
+        @media screen and (max-width: 1200px) {
+            /* Add your styles here if needed */
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <form action="" id="form">
+            <h1>Registration Form</h1>
+            <div class="input-group">
+                <label for="fname">First Name:</label>
+                <input type="text" id="fname" name="fname">
+                <div class="error"></div>
+            </div>
+            <div class="input-group">
+                <label for="email">Email:</label>
+                <input type="text" id="email" name="email">
+                <div class="error"></div>
+            </div>
+            <div class="input-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password">
+                <div class="error"></div>
+            </div>
+            <div class="input-group">
+                <label for="cpassword">Confirm Password:</label>
+                <input type="password" id="cpassword" name="cpassword">
+                <div class="error"></div>
+            </div>
+            <div class="input-group">
+                <label for="dob">DOB:</label>
+                <input type="date" id="dob" name="dob">
+                <div class="error"></div>
+            </div>
+            <div class="input-group">
+                <label>Gender:</label>
+                <label><input type="radio" name="gender" value="male"> Male</label>
+                <label><input type="radio" name="gender" value="female"> Female</label>
+                <label><input type="radio" name="gender" value="others"> Others</label>
+                <div class="error"></div>
+            </div>
+            <div class="input-group">
+                <label for="address">Address:</label>
+                <textarea id="address" name="address" rows="4" required></textarea>
+                <div class="error"></div>
+            </div>
+            <button type="submit">Submit</button>
+            <div class="link">
+                <p>Already have an account? <a href="sign_in.html">Go to Sign In</a></p>
+            </div>
+        </form>
+    </div>
+    
+    <script>
+        const form = document.getElementById('form');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            validateInputs();
+        });
+
+        function validateInputs() {
+            const fname = document.getElementById('fname').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const cpassword = document.getElementById('cpassword').value.trim();
+            const dob = document.getElementById('dob').value.trim();
+            const genderChecked = document.querySelector('input[name="gender"]:checked');
+            const address = document.getElementById('address').value.trim();
+
+            let isValid = true;
+
+            if (fname === '') {
+                setError('fname', 'First name is required');
+                isValid = false;
+            } else {
+                setSuccess('fname');
+            }
+
+            if (email === '') {
+                setError('email', 'Email is required');
+                isValid = false;
+            } else if (!validateEmail(email)) {
+                setError('email', 'Email is not valid');
+                isValid = false;
+            } else {
+                setSuccess('email');
+            }
+
+            if (password === '') {
+                setError('password', 'Password is required');
+                isValid = false;
+            } else {
+                setSuccess('password');
+            }
+
+            if (cpassword !== password) {
+                setError('cpassword', 'Passwords do not match');
+                isValid = false;
+            } else {
+                setSuccess('cpassword');
+            }
+
+            if (dob === '') {
+                setError('dob', 'Date of Birth is required');
+                isValid = false;
+            } else {
+                setSuccess('dob');
+            }
+
+            if (!genderChecked) {
+                setError('gender', 'Please select a gender');
+                isValid = false;
+            } else {
+                setSuccess('gender');
+            }
+
+            if (address === '') {
+                setError('address', 'Address is required');
+                isValid = false;
+            } else {
+                setSuccess('address');
+            }
+
+            if (isValid) {
+                alert('Form submitted successfully!');
+            }
+        }
+
+        function setError(elementId, message) {
+            const inputGroup = document.getElementById(elementId).parentElement;
+            const errorElement = inputGroup.querySelector('.error');
+            errorElement.innerText = message;
+            inputGroup.classList.add('error');
+            inputGroup.classList.remove('success');
+        }
+
+        function setSuccess(elementId) {
+            const inputGroup = document.getElementById(elementId).parentElement;
+            const errorElement = inputGroup.querySelector('.error');
+            errorElement.innerText = '';
+            inputGroup.classList.add('success');
+            inputGroup.classList.remove('error');
+        }
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(String(email).toLowerCase());
+        }
+    </script>
+</body>
+</html>
